@@ -22,18 +22,14 @@ const routes = {
   type: "Feature",
   geometry: {
     type: "LineString",
-    coordinates:direction,
+    coordinates:dis,
   },
 };
  
 useEffect(()=>{
-    let dire=[]
-    datas.forEach((x)=>{
-         dire.push([+x.longitude,+x.latitude])
-    });
-   setDirection(dire)
+    
    console.log(datas,showMarks,'routes',routes)
-},[datas,showMarks,routes])
+},[datas,showMarks,dis])
   return (
     <ReactMapGL
       style={{ position: "relative", top: "-100%", width: "50%", left: "50%" }}
@@ -45,13 +41,12 @@ useEffect(()=>{
       height="75%"
       onViewportChange={(viewport) => setViewport(viewport)}
     >
-      {/* <GeolocateControl
+      <GeolocateControl
         style={{right:10,top:10}}
         positionOptions={{ enableHighAccuracy: true }}
         trackUserLocation={true}
         auto 
-        zoom={2}
-      /> */}
+      />
 
       {showMarks &&
         datas.map((x, i) => (

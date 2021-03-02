@@ -7,6 +7,7 @@ function App() {
 const [formdata,setFormData]=useState([]);
 const [marks,setMarks]=useState(false);
  const [display, setdisplayRoute] = useState(false);
+ const [routeData,setRouteData]=useState();
   const getFormData=(inp)=>{
       setFormData([...formdata,inp])
       
@@ -16,9 +17,15 @@ const [marks,setMarks]=useState(false);
   }
   const getMarks=()=>{
        setMarks(true)
+       
   }
    const showButton = () => {
-     setdisplayRoute(true);
+     let dire = [];
+     formdata.forEach((x) => {
+       dire.push([+x.longitude, +x.latitude]);
+     });
+     setRouteData(dire);
+    console.log(dire)
    };
   // useEffect(()=>{
   //   // console.log('app',formdata)
@@ -34,7 +41,7 @@ const [marks,setMarks]=useState(false);
         <Table data={formdata} show={showButton}/>
 
         
-          <MyMapComponent datas={formdata} showMarks={marks} dis={display}/>
+          <MyMapComponent datas={formdata} showMarks={marks} dis={routeData}/>
         
       </div>
     </div>
