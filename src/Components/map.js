@@ -10,7 +10,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const Map=({datas,showMarks,dis})=>{
    
-    const [direction,setDirection]=useState([]);
+    
   const [viewport, setViewport] = useState({
     latitude: 20.5937,
     longitude: 78.9629,

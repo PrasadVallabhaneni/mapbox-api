@@ -118,7 +118,7 @@ console.log(data)
             </td>
           </tr>
         </table>
-        <button type='button' className='routeButton' onClick={show}>Show Routes</button>
+        <button type='button' className='routeButton' onClick={show} disabled={data.length>0?false:true}>Show Route</button>
       </div>
     );
 }

@@ -147,7 +147,7 @@ tr >td:not(:first-child){
 }
 .routeButton{
   background-color: #074770;
-  color: white;
+  color: #ffffff;
   width: 70%;
   border:none;
   border-radius: 21px;

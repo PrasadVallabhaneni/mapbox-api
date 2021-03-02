@@ -13,7 +13,10 @@ const [marks,setMarks]=useState(false);
       
   }
   const home=()=>{
+    
     setFormData([]);
+    setRouteData([]);
+    
   }
   const getMarks=()=>{
        setMarks(true)
