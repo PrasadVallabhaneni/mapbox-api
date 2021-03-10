@@ -7,7 +7,7 @@ function App() {
 const [formdata,setFormData]=useState([]);
 const [marks,setMarks]=useState(false);
  const [display, setdisplayRoute] = useState(false);
- const [routeData,setRouteData]=useState();
+ const [routeData,setRouteData]=useState([]);
   const getFormData=(inp)=>{
       setFormData([...formdata,inp])
       

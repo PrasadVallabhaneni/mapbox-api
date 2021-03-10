@@ -21,6 +21,7 @@ transition: 0.3s ease-in;
 }
 .home:focus{
   outline: none;
+  
 }
 .container{
   background: #074770;
@@ -162,6 +163,25 @@ tr >td:not(:first-child){
   outline: none;
 }
 
+ .mapboxgl-ctrl-directions {
+    /* display: none; */
+    /* height: 100px; */
+    /* opacity: 0.4; */
+ } 
+
+
+.mapbox-directions-component {
+    display: none;
+}
+
+
+.mapboxgl-ctrl-bottom-left
+{
+   width: 100px;
+   height: 150px;
+   opacity: 0.2;
+    
+}
 
 
 

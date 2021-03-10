@@ -1,83 +1,102 @@
-import React,{useState,useEffect} from 'react';
-import ReactMapGL, {
-  Marker,
-  GeolocateControl,
-  Source,
-  Layer,
-} from "react-map-gl";
+import React, { useState, useRef, useEffect } from "react";
+// import ReactMapGL, {
+//   Marker,
+//   GeolocateControl,
+//   Source,
+//   Layer,
+// } from "react-map-gl";
+import mapboxgl from "mapbox-gl";
+// import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
+// import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+const Map = ({ datas, showMarks, dis }) => {
+  const [lat, setLat] = useState(20.5937);
+  const [long, setLong] = useState(78.9629);
 
-const Map=({datas,showMarks,dis})=>{
-   
-    
-  const [viewport, setViewport] = useState({
-    latitude: 20.5937,
-    longitude: 78.9629,
-    zoom: 4,
-    width: "50%",
-    height: "100%",
-  });
-const routes = {
-  type: "Feature",
-  geometry: {
-    type: "LineString",
-    coordinates:dis,
-  },
-};
- 
-useEffect(()=>{
-    
-   console.log(datas,showMarks,'routes',routes)
-},[datas,showMarks,dis])
+  const container = useRef();
+  // const [viewport, setViewport] = useState({
+  //   latitude: +lat,
+  //   longitude: +long,
+  //   zoom: 6,
+  //   width: "50%",
+  //   height: "100%",
+  // });
+  // const routes = {
+  //   type: "Feature",
+  //   geometry: {
+  //     type: "LineString",
+  //     coordinates: dis,
+  //   },
+  // };
+
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      accessToken:
+        "pk.eyJ1IjoicHJhc2FkdmFsbGFiaGFuZW5pIiwiYSI6ImNrbHJreWNmMDAxN3kyd28zdmh2bHQxbjkifQ.2WFulK07Qaj0p9KXtWB-hA",
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [long, lat],
+      zoom: 4,
+    });
+    var directions = new MapboxDirections({
+      accessToken:
+        "pk.eyJ1IjoicHJhc2FkdmFsbGFiaGFuZW5pIiwiYSI6ImNrbHJreWNmMDAxN3kyd28zdmh2bHQxbjkifQ.2WFulK07Qaj0p9KXtWB-hA",
+      unit: "metric",
+      profile: "mapbox/cycling",
+    });
+    map.addControl(new mapboxgl.FullscreenControl());
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(directions, "bottom-left");
+
+    if (showMarks) {
+      datas.forEach((x) => {
+        var marker = new mapboxgl.Marker()
+          .setLngLat([x.longitude, x.latitude])
+          .addTo(map);
+      });
+    }
+    if (dis) {
+      dis.forEach((x, i) => {
+        if (i == 0) {
+          directions.setOrigin([x[0], x[1]]);
+        } else if (i == dis.length - 1) {
+          directions.setDestination([x[0], x[1]]);
+        } else {
+          directions.addWaypoint(i - 1, [x[0], x[1]]);
+        }
+      });
+
+      // directions.setDestination([77,12])
+    }
+
+    // if(!datas.length && !dis.length){
+    //   console.log('remo')
+    //       // map.remove();
+
+    // }
+    if (datas.length) {
+      setLat(datas[datas.length - 1].latitude);
+      setLong(datas[datas.length - 1].longitude);
+    }
+
+    console.log("datas", datas, "marks", showMarks, "routes", dis);
+  }, [datas, showMarks, dis, lat, long]);
   return (
-    <ReactMapGL
-      style={{ position: "relative", top: "-100%", width: "50%", left: "50%" }}
-      mapboxApiAccessToken={
-        "pk.eyJ1IjoicHJhc2FkdmFsbGFiaGFuZW5pIiwiYSI6ImNrbHJreWNmMDAxN3kyd28zdmh2bHQxbjkifQ.2WFulK07Qaj0p9KXtWB-hA"
-      }
-      {...viewport}
-      width="50%"
-      height="75%"
-      onViewportChange={(viewport) => setViewport(viewport)}
-    >
-      <GeolocateControl
-        style={{right:10,top:10}}
-        positionOptions={{ enableHighAccuracy: true }}
-        trackUserLocation={true}
-        auto 
-      />
-
-      {showMarks &&
-        datas.map((x, i) => (
-          <Marker
-            key={i}
-            latitude={+x.latitude}
-            longitude={+x.longitude}
-            offsetTop={(-viewport.zoom * 5) / 2}
-          >
-            <img
-              src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png"
-              width={20}
-              height={20}
-            />
-          </Marker>
-        ))}
-      {dis && <Source id="route" type="geojson" data={routes} />}
-      <Layer
-        id="route"
-        type="line"
-        source="route"
-        layout={{
-          "line-join": "round",
-          "line-cap": "round",
-        }}
-        paint={{
-          "line-color": "black",
-          "line-width": 4,
-        }}
-      />
-    </ReactMapGL>
+    <div
+      style={{
+        position: "relative",
+        top: "-100%",
+        width: "50%",
+        height: "78%",
+        borderBottomRightRadius: "36px",
+        left: "50%",
+      }}
+      id="map"
+      ref={container}
+    ></div>
   );
-}
+};
 export default Map;
